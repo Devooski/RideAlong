@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<title id="title">RideAlong app icon</title>
+<desc id="desc">Green map pin over a dark rounded square for RideAlong.</desc>
+<rect width="512" height="512" rx="112" fill="#08111F"/>
+<circle cx="256" cy="244" r="154" fill="#20D7A3"/>
+<path d="M256 102c-66.3 0-120 53.7-120 120 0 88.3 120 190 120 190s120-101.7 120-190c0-66.3-53.7-120-120-120Z" fill="#F8FAFC"/>
+<circle cx="256" cy="222" r="49" fill="#08111F"/>
+<path d="M198 356c35-34 81-34 116 0" stroke="#08111F" stroke-width="24" stroke-linecap="round"/>
+</svg>

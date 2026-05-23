@@ -1,0 +1,11 @@
+const express = require("express");
+const { z } = require("zod");
+const pool = require("../db/pool");
+const { requireAuth } = require("../middleware/auth");
+const router = express.Router();
+const point = z.object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180), name: z.string().optional() });
+const schema = z.object({ origin: point, destination: point, route: z.array(point).min(2), seatsAvailable: z.number().int().min(1).max(8), pricePerSeat: z.number().nonnegative(), departureTime: z.string().datetime(), vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.number().int().optional(), plate: z.string().optional() }).optional(), preferences: z.record(z.any()).optional() });
+router.post("/", requireAuth, async (req, res, next) => { try { const d = schema.parse(req.body); const geo = { type: "LineString", coordinates: d.route.map(p => [p.lng, p.lat]) }; const r = await pool.query(`INSERT INTO trips (driver_id,origin_lat,origin_lng,dest_lat,dest_lng,origin_name,dest_name,route_polyline,route_geom,seats_available,price_per_seat,departure_time,vehicle_make,vehicle_model,vehicle_year,vehicle_plate,preferences,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,ST_SetSRID(ST_GeomFromGeoJSON($8),4326)::geography,$9,$10,$11,$12,$13,$14,$15,$16,'broadcasting') RETURNING *`, [req.user.id,d.origin.lat,d.origin.lng,d.destination.lat,d.destination.lng,d.origin.name||null,d.destination.name||null,JSON.stringify(geo),d.seatsAvailable,d.pricePerSeat,d.departureTime,d.vehicle?.make||null,d.vehicle?.model||null,d.vehicle?.year||null,d.vehicle?.plate||null,JSON.stringify(d.preferences||{})]); res.status(201).json({ trip: r.rows[0] }); } catch (err) { next(err); } });
+router.get("/mine", requireAuth, async (req, res, next) => { try { const r = await pool.query(`SELECT * FROM trips WHERE driver_id=$1 ORDER BY departure_time DESC LIMIT 50`, [req.user.id]); res.json({ trips: r.rows }); } catch (err) { next(err); } });
+router.patch("/:id/cancel", requireAuth, async (req, res, next) => { try { const r = await pool.query(`UPDATE trips SET status='cancelled' WHERE id=$1 AND driver_id=$2 RETURNING *`, [req.params.id, req.user.id]); if (!r.rows[0]) return res.status(404).json({ error: "Trip not found" }); res.json({ trip: r.rows[0] }); } catch (err) { next(err); } });
+module.exports = router;

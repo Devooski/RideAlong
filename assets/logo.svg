@@ -1,0 +1,13 @@
+<svg width="960" height="300" viewBox="0 0 960 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<title id="title">RideAlong logo</title>
+<desc id="desc">A modern road and pin logo for the RideAlong rideshare matching app.</desc>
+<rect width="960" height="300" rx="56" fill="#08111F"/>
+<circle cx="156" cy="150" r="88" fill="#20D7A3"/>
+<path d="M155.8 65C119.6 65 90 94.6 90 130.8c0 48.4 65.8 104.2 65.8 104.2s65.8-55.8 65.8-104.2C221.6 94.6 192 65 155.8 65Z" fill="#F8FAFC"/>
+<circle cx="155.8" cy="130.8" r="28" fill="#08111F"/>
+<path d="M126 206c18-18 42-18 60 0" stroke="#08111F" stroke-width="12" stroke-linecap="round"/>
+<path d="M298 94h72c44 0 73 26 73 64 0 27-14 49-38 59l48 58h-52l-41-51h-22v51h-40V94Zm70 95c21 0 34-12 34-31s-13-30-34-30h-30v61h30Z" fill="#F8FAFC"/>
+<path d="M480 94h40v181h-40V94Zm76 0h69c58 0 98 37 98 91s-40 90-98 90h-69V94Zm67 145c34 0 58-22 58-54 0-33-24-55-58-55h-27v109h27Zm129-145h138v35H792v36h87v34h-87v41h101v35H752V94Z" fill="#F8FAFC"/>
+<path d="M299 40c176 31 350 31 525 0" stroke="#20D7A3" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+<path d="M299 260c176-31 350-31 525 0" stroke="#38BDF8" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+</svg>

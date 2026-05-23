@@ -1,0 +1,13 @@
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const { z } = require("zod");
+const pool = require("../db/pool");
+const { signToken } = require("../utils/token");
+const { requireAuth } = require("../middleware/auth");
+const router = express.Router();
+const registerSchema = z.object({ name: z.string().min(2).max(100), email: z.string().email().max(255), phone: z.string().max(30).optional(), password: z.string().min(8).max(100) });
+const loginSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
+router.post("/register", async (req, res, next) => { try { const d = registerSchema.parse(req.body); const hash = await bcrypt.hash(d.password, 12); const r = await pool.query(`INSERT INTO users (name,email,phone,password_hash) VALUES ($1,$2,$3,$4) RETURNING id,name,email,phone,rating,trip_count,created_at`, [d.name, d.email.toLowerCase(), d.phone || null, hash]); const user = r.rows[0]; res.status(201).json({ user, token: signToken(user) }); } catch (err) { if (err.code === "23505") { err.status = 409; err.message = "An account with this email already exists"; } next(err); } });
+router.post("/login", async (req, res, next) => { try { const d = loginSchema.parse(req.body); const r = await pool.query(`SELECT id,name,email,phone,password_hash,rating,trip_count,created_at FROM users WHERE email=$1`, [d.email.toLowerCase()]); const user = r.rows[0]; if (!user) return res.status(401).json({ error: "Invalid email or password" }); const ok = await bcrypt.compare(d.password, user.password_hash); if (!ok) return res.status(401).json({ error: "Invalid email or password" }); delete user.password_hash; res.json({ user, token: signToken(user) }); } catch (err) { next(err); } });
+router.get("/me", requireAuth, async (req, res, next) => { try { const r = await pool.query(`SELECT id,name,email,phone,profile_photo,rating,trip_count,id_verified,created_at FROM users WHERE id=$1`, [req.user.id]); res.json({ user: r.rows[0] }); } catch (err) { next(err); } });
+module.exports = router;

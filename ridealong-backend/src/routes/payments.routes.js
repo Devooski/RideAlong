@@ -1,0 +1,10 @@
+const express = require("express");
+const { z } = require("zod");
+const Stripe = require("stripe");
+const pool = require("../db/pool");
+const { requireAuth } = require("../middleware/auth");
+const router = express.Router();
+const stripe = process.env.STRIPE_SECRET_KEY ? Stripe(process.env.STRIPE_SECRET_KEY) : null;
+router.post("/intent", requireAuth, async (req, res, next) => { try { if (!stripe) return res.status(503).json({ error: "Stripe is not configured" }); const { tripId } = z.object({ tripId: z.string().uuid() }).parse(req.body); const r = await pool.query(`SELECT id,price_per_seat FROM trips WHERE id=$1 AND status='broadcasting' AND seats_available>0`, [tripId]); const trip = r.rows[0]; if (!trip) return res.status(404).json({ error: "Trip not available" }); const amount = Math.max(50, Math.round(Number(trip.price_per_seat)*100)); const intent = await stripe.paymentIntents.create({ amount, currency: "cad", automatic_payment_methods: { enabled: true }, metadata: { tripId, passengerId: req.user.id } }); res.json({ clientSecret: intent.client_secret }); } catch (err) { next(err); } });
+router.post("/webhook", async (req, res) => { if (!stripe) return res.status(503).json({ error: "Stripe is not configured" }); const sig=req.headers["stripe-signature"]; let event; try { event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET); } catch (err) { return res.status(400).send(`Webhook Error: ${err.message}`); } if (event.type === "payment_intent.succeeded") { const { tripId, passengerId } = event.data.object.metadata; await pool.query(`UPDATE bookings SET status='paid' WHERE trip_id=$1 AND passenger_id=$2`, [tripId, passengerId]); } res.json({ received: true }); });
+module.exports = router;

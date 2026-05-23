@@ -1,0 +1,3 @@
+RideAlong Backend Error Scan
+
+All JavaScript files passed node --check syntax validation.

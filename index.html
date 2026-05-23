@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#20D7A3" />
+  <meta name="description" content="RideAlong is a real-time rideshare matching web app for drivers and passengers." />
+  <title>RideAlong | Real-time rideshare matching</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="top">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="RideAlong home">
+        <img src="assets/icon.svg" alt="" class="brand-icon" />
+        <span>RideAlong</span>
+      </a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      <div class="nav-links" data-nav-links>
+        <a href="#how">How it works</a>
+        <a href="#demo">Live demo</a>
+        <a href="#safety">Safety</a>
+        <a href="#investors">Investors</a>
+        <button class="btn btn-small" data-open-demo>Launch demo</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero section">
+      <div class="hero-copy">
+        <span class="eyebrow">Investor-ready MVP</span>
+        <h1>Real-time rideshare matching for people already heading the same way.</h1>
+        <p>RideAlong connects drivers with open seats to passengers going nearby, using route proximity, timing, ratings, and safety checks to create practical shared trips.</p>
+        <div class="hero-actions">
+          <button class="btn" data-open-demo>Try the app</button>
+          <a class="btn btn-secondary" href="#investors">View investor snapshot</a>
+        </div>
+        <div class="trust-row" aria-label="Key product metrics">
+          <div><strong>92%</strong><span>prototype match score</span></div>
+          <div><strong>15 km</strong><span>route flex radius</span></div>
+          <div><strong>4-step</strong><span>booking flow</span></div>
+        </div>
+      </div>
+      <div class="phone-shell" aria-label="RideAlong mobile interface preview">
+        <div class="phone-top"></div>
+        <div class="app-card active-card">
+          <div class="mini-map">
+            <div class="route-line"></div>
+            <span class="pin pin-start"></span>
+            <span class="pin pin-end"></span>
+            <span class="car">🚗</span>
+          </div>
+          <div class="ride-card">
+            <div>
+              <p class="muted">Best match</p>
+              <h3>Windsor → Toronto</h3>
+              <p>Driver 6 min away • 2 seats left</p>
+            </div>
+            <span class="score">96</span>
+          </div>
+          <button class="btn btn-full" data-open-demo>Book seat</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section how" id="how">
+      <div class="section-heading">
+        <span class="eyebrow">How it works</span>
+        <h2>Simple enough for launch day. Strong enough for investor demos.</h2>
+      </div>
+      <div class="grid three">
+        <article class="feature-card"><span>01</span><h3>Broadcast a trip</h3><p>Drivers enter origin, destination, seats, time, and price. The app creates a visible route opportunity.</p></article>
+        <article class="feature-card"><span>02</span><h3>Match by route</h3><p>Passengers are scored by pickup distance, destination fit, timing, and trust signals.</p></article>
+        <article class="feature-card"><span>03</span><h3>Confirm safely</h3><p>Both users receive trip details, a match code, and safety guidance before pickup.</p></article>
+      </div>
+    </section>
+
+    <section class="section demo" id="demo">
+      <div class="section-heading">
+        <span class="eyebrow">Live browser demo</span>
+        <h2>Run a matching scenario instantly.</h2>
+        <p>Use this to show potential investors the user flow without needing a backend connection.</p>
+      </div>
+      <div class="demo-layout">
+        <form class="panel form-panel" id="rideForm">
+          <label>Role<select id="role"><option value="passenger">Passenger</option><option value="driver">Driver</option></select></label>
+          <label>Origin<input id="origin" value="Windsor, ON" required /></label>
+          <label>Destination<input id="destination" value="Toronto, ON" required /></label>
+          <div class="split">
+            <label>Seats<input id="seats" type="number" min="1" max="6" value="2" /></label>
+            <label>Budget/Seat<input id="price" type="number" min="5" max="200" value="48" /></label>
+          </div>
+          <button class="btn btn-full" type="submit">Find matches</button>
+        </form>
+        <div class="panel results-panel">
+          <div class="results-header"><h3>Recommended matches</h3><span id="resultCount">3 found</span></div>
+          <div id="matches" class="matches" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section safety" id="safety">
+      <div class="section-heading"><span class="eyebrow">Safety and trust</span><h2>Built around confidence before pickup.</h2></div>
+      <div class="grid four">
+        <article class="metric"><strong>ID</strong><span>Verified profiles</span></article>
+        <article class="metric"><strong>Code</strong><span>Pickup confirmation</span></article>
+        <article class="metric"><strong>Live</strong><span>Trip status sharing</span></article>
+        <article class="metric"><strong>24/7</strong><span>Incident reporting path</span></article>
+      </div>
+    </section>
+
+    <section class="section investors" id="investors">
+      <div class="investor-box">
+        <div><span class="eyebrow">Investor snapshot</span><h2>RideAlong targets underused empty seats in everyday intercity travel.</h2></div>
+        <ul>
+          <li>Route-based matching instead of static listing searches.</li>
+          <li>Mobile-first web app that works on laptop, Android, and iOS browsers.</li>
+          <li>Future revenue streams: booking fee, subscriptions, verified driver tiers, and B2B commuter partnerships.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="matchModal" aria-hidden="true" role="dialog" aria-label="Booking confirmation">
+    <div class="modal-card">
+      <button class="modal-close" data-close-modal aria-label="Close">×</button>
+      <h2>Seat request ready</h2>
+      <p id="modalText">Your RideAlong match is ready for confirmation.</p>
+      <div class="code-box">Match code <strong id="matchCode">4821</strong></div>
+      <button class="btn btn-full" data-close-modal>Continue</button>
+    </div>
+  </div>
+
+  <footer class="footer"><p>© <span id="year"></span> RideAlong. Built for launch-day investor demo.</p></footer>
+  <script src="app.js"></script>
+</body>
+</html>
